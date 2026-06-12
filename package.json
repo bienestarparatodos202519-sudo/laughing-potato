@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/bienestarparatodos202519-sudo/laughing-potato#readme",
   "dependencies": {
+    "@capacitor/android": "^8.4.0",
+    "@capacitor/cli": "^8.4.0",
+    "@capacitor/core": "^8.4.0",
     "@vitejs/plugin-react": "^6.0.2",
     "lucide-react": "^1.17.0",
     "papaparse": "^5.5.3",
