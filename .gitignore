@@ -8,3 +8,4 @@ server/dist/
 npm-debug.log*
 coverage/
 .DS_Store
+*.tsbuildinfo
