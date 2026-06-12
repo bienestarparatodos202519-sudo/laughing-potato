@@ -1,52 +1,51 @@
-import writeXlsxFile from "write-excel-file";
+import writeXlsxFile from "write-excel-file/browser";
 import type { AuditRow } from "./types";
 
 export async function exportAuditRows(rows: AuditRow[]): Promise<void> {
-  const schema = [
+  const columns = [
     {
-      column: "Fecha",
+      header: "Fecha",
       type: String,
-      value: (row: AuditRow) => row.sentAt ?? ""
+      cell: (row: AuditRow) => row.sentAt ?? ""
     },
     {
-      column: "Nombre",
+      header: "Nombre",
       type: String,
-      value: (row: AuditRow) => row.name
+      cell: (row: AuditRow) => row.name
     },
     {
-      column: "Telefono",
+      header: "Telefono",
       type: String,
-      value: (row: AuditRow) => row.phone
+      cell: (row: AuditRow) => row.phone
     },
     {
-      column: "Estado",
+      header: "Estado",
       type: String,
-      value: (row: AuditRow) => row.status
+      cell: (row: AuditRow) => row.status
     },
     {
-      column: "Gateway",
+      header: "Gateway",
       type: String,
-      value: (row: AuditRow) => row.gateway
+      cell: (row: AuditRow) => row.gateway
     },
     {
-      column: "Mensaje",
+      header: "Mensaje",
       type: String,
-      value: (row: AuditRow) => row.message
+      cell: (row: AuditRow) => row.message
     },
     {
-      column: "ID proveedor",
+      header: "ID proveedor",
       type: String,
-      value: (row: AuditRow) => row.providerId ?? ""
+      cell: (row: AuditRow) => row.providerId ?? ""
     },
     {
-      column: "Error",
+      header: "Error",
       type: String,
-      value: (row: AuditRow) => row.error ?? ""
+      cell: (row: AuditRow) => row.error ?? ""
     }
   ];
 
-  await writeXlsxFile(rows, {
-    schema,
-    fileName: `omnisend-bitacora-${new Date().toISOString().slice(0, 10)}.xlsx`
-  });
+  await writeXlsxFile(rows, { columns }).toFile(
+    `omnisend-bitacora-${new Date().toISOString().slice(0, 10)}.xlsx`
+  );
 }

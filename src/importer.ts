@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import readXlsxFile from "read-excel-file";
+import { readSheet } from "read-excel-file/browser";
 import type { ContactRow, ImportAnalysis, ImportResult } from "./types";
 
 const PHONE_HEADER_HINTS = [
@@ -70,7 +70,7 @@ export function buildContactsFromRecords(
   }
 
   return records
-    .map((values, index) => {
+    .map((values, index): ContactRow | null => {
       const phone = normalizePhone(values[phoneColumn] ?? "");
       if (!phone) {
         return null;
@@ -82,7 +82,7 @@ export function buildContactsFromRecords(
         values,
         phone,
         name: cleanValue(values[nameColumn ?? ""] ?? ""),
-        status: "Pendiente" as const
+        status: "Pendiente"
       };
     })
     .filter((contact): contact is ContactRow => Boolean(contact));
@@ -204,8 +204,8 @@ export function normalizePhone(value: unknown): string {
 }
 
 async function readXlsx(file: File): Promise<Matrix> {
-  const rows = await readXlsxFile(file);
-  return rows.map((row) => row.map((cell) => cleanValue(cell)));
+  const rows = await readSheet(file);
+  return rows.map((row: unknown[]) => row.map((cell: unknown) => cleanValue(cell)));
 }
 
 async function readCsv(file: File): Promise<Matrix> {
