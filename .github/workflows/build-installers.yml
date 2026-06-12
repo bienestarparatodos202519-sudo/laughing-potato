@@ -1,5 +1,8 @@
 name: Build installers
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -71,3 +74,34 @@ jobs:
           name: Beneficiarios-Drive-Android-APK
           path: release/android/Beneficiarios-Drive.apk
           if-no-files-found: error
+
+  publish-release:
+    name: Publish direct downloads
+    runs-on: ubuntu-latest
+    needs:
+      - windows-exe
+      - android-apk
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: Download installer artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+
+      - name: Publish EXE and APK release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: installers-cursor-google-drive-beneficiarios-e435
+          name: Instaladores Beneficiarios Drive
+          body: |
+            Descargas automaticas de la app Beneficiarios Drive.
+
+            - Windows: Beneficiarios-Drive-Setup-1.0.0.exe
+            - Android: Beneficiarios-Drive.apk
+          prerelease: true
+          make_latest: false
+          overwrite_files: true
+          files: |
+            release-assets/Beneficiarios-Drive-Windows-EXE/*.exe
+            release-assets/Beneficiarios-Drive-Android-APK/*.apk

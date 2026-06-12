@@ -20,14 +20,14 @@ Cada push de la rama genera instaladores reales en GitHub Actions:
 - **Windows laptop:** `Beneficiarios-Drive-Setup-1.0.0.exe`
 - **Android:** `Beneficiarios-Drive.apk`
 
-Enlace de descarga de los artefactos generados:
+Enlaces directos de descarga:
+
+- EXE Windows: https://github.com/bienestarparatodos202519-sudo/laughing-potato/releases/download/installers-cursor-google-drive-beneficiarios-e435/Beneficiarios-Drive-Setup-1.0.0.exe
+- APK Android: https://github.com/bienestarparatodos202519-sudo/laughing-potato/releases/download/installers-cursor-google-drive-beneficiarios-e435/Beneficiarios-Drive.apk
+
+Historial del workflow que los genera:
 
 https://github.com/bienestarparatodos202519-sudo/laughing-potato/actions/workflows/build-installers.yml?query=branch%3Acursor%2Fgoogle-drive-beneficiarios-e435
-
-Abre el ultimo workflow exitoso y descarga:
-
-1. `Beneficiarios-Drive-Windows-EXE`
-2. `Beneficiarios-Drive-Android-APK`
 
 > Nota: GitHub genera los archivos automaticamente despues de cada push. El APK requiere que `VITE_API_BASE_URL`
 > apunte a un backend HTTPS publicado para que OCR funcione desde Android.
