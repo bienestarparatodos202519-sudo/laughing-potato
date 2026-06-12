@@ -71,7 +71,7 @@ app.post("/api/ocr", async (request, response) => {
 });
 
 app.use(express.static(new URL("../../client/dist", import.meta.url).pathname));
-app.get("*", (_request, response) => {
+app.use((_request, response) => {
   response.sendFile(new URL("../../client/dist/index.html", import.meta.url).pathname);
 });
 

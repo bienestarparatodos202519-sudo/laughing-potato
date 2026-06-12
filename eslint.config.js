@@ -20,4 +20,14 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
+  {
+    files: ["client/public/sw.js"],
+    languageOptions: {
+      globals: {
+        caches: "readonly",
+        fetch: "readonly",
+        self: "readonly",
+      },
+    },
+  },
 );
