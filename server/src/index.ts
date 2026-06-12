@@ -9,6 +9,7 @@ import { z } from "zod";
 const PORT = Number(process.env.PORT ?? 8080);
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN ?? "http://localhost:5173";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const CLIENT_DIST_DIR = process.env.CLIENT_DIST_DIR ?? new URL("../../client/dist", import.meta.url).pathname;
 
 const primaryModels = (process.env.GEMINI_PRIMARY_MODELS ?? "gemini-3.5-flash,gemini-3.1-flash-lite")
   .split(",")
@@ -70,9 +71,9 @@ app.post("/api/ocr", async (request, response) => {
   }
 });
 
-app.use(express.static(new URL("../../client/dist", import.meta.url).pathname));
+app.use(express.static(CLIENT_DIST_DIR));
 app.use((_request, response) => {
-  response.sendFile(new URL("../../client/dist/index.html", import.meta.url).pathname);
+  response.sendFile("index.html", { root: CLIENT_DIST_DIR });
 });
 
 app.listen(PORT, () => {

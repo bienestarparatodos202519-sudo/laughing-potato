@@ -13,17 +13,34 @@ crear carpetas en el Google Drive personal del operador y registrar los enlaces 
 - **OCR:** Gemini con reintentos y fallback de modelos (`gemini-3.5-flash`, `gemini-3.1-flash-lite`).
 - **Instalacion movil:** PWA con `manifest.webmanifest` y service worker.
 
-## Instalacion automatica
+## Descarga automatica de instaladores EXE y APK
 
-### Descarga e instala desde enlace directo
+Cada push de la rama genera instaladores reales en GitHub Actions:
 
-Linux/macOS:
+- **Windows laptop:** `Beneficiarios-Drive-Setup-1.0.0.exe`
+- **Android:** `Beneficiarios-Drive.apk`
+
+Enlace de descarga de los artefactos generados:
+
+https://github.com/bienestarparatodos202519-sudo/laughing-potato/actions/workflows/build-installers.yml?query=branch%3Acursor%2Fgoogle-drive-beneficiarios-e435
+
+Abre el ultimo workflow exitoso y descarga:
+
+1. `Beneficiarios-Drive-Windows-EXE`
+2. `Beneficiarios-Drive-Android-APK`
+
+> Nota: GitHub genera los archivos automaticamente despues de cada push. El APK requiere que `VITE_API_BASE_URL`
+> apunte a un backend HTTPS publicado para que OCR funcione desde Android.
+
+## Instalacion por scripts para desarrollo
+
+Linux/macOS desde enlace directo:
 
 ```bash
 curl -L https://raw.githubusercontent.com/bienestarparatodos202519-sudo/laughing-potato/cursor/google-drive-beneficiarios-e435/scripts/bootstrap-linux.sh | bash
 ```
 
-Windows PowerShell:
+Windows PowerShell desde enlace directo:
 
 ```powershell
 iwr https://raw.githubusercontent.com/bienestarparatodos202519-sudo/laughing-potato/cursor/google-drive-beneficiarios-e435/scripts/bootstrap-windows.ps1 -OutFile bootstrap-windows.ps1; powershell -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1
@@ -62,6 +79,7 @@ VITE_FIREBASE_PROJECT_ID=your_project_id
 VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
+VITE_API_BASE_URL=
 ```
 
 ## Configuracion Google/Firebase
@@ -89,7 +107,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 7. El panel lateral muestra carpetas creadas y expedientes completos.
 8. **Descargar Excel** genera CSV con `UTF-8 BOM` y `sep=,`, respetando filtros activos.
 
-## Instalar en Android o laptop
+## Instalar en Android o laptop sin EXE/APK
 
 1. Sirve la app por HTTPS o `localhost`.
 2. Abre la URL en Chrome, Edge o Safari.
@@ -99,6 +117,9 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 - `npm run dev`: levanta cliente y servidor en modo desarrollo.
 - `npm run build`: compila Vite y Express.
+- `npm run build:desktop:win`: genera el instalador `.exe` de Windows con Electron Builder.
+- `npm run build:android:apk`: genera `release/android/Beneficiarios-Drive.apk` con Capacitor.
+- `npm run build:installers`: genera `.exe` y `.apk` en un entorno con toolchains Windows/Android.
 - `npm start`: sirve la build desde Express.
 - `npm run typecheck`: valida TypeScript en ambos workspaces.
 - `npm run lint`: ejecuta ESLint.

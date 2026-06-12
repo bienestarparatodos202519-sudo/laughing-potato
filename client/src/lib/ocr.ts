@@ -1,8 +1,10 @@
 import type { OcrResponse } from "../types";
 
+const apiBaseUrl = String(import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/$/, "");
+
 export async function runIneOcr(file: File): Promise<OcrResponse> {
   const imageBase64 = await fileToBase64(file);
-  const response = await fetch("/api/ocr", {
+  const response = await fetch(`${apiBaseUrl}/api/ocr`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
