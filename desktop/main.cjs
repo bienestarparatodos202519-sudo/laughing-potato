@@ -6,7 +6,7 @@ const path = require("path");
 const DESKTOP_PORT = process.env.PORT || "41731";
 
 async function createWindow() {
-  const rootDir = app.isPackaged ? app.getAppPath() : path.join(__dirname, "..");
+  const rootDir = resolveRuntimeRoot();
   const serverEntry = path.join(rootDir, "server", "dist", "index.js");
   const clientDist = path.join(rootDir, "client", "dist");
   const logFile = path.join(app.getPath("userData"), "startup.log");
@@ -49,6 +49,23 @@ async function createWindow() {
   });
 
   await window.loadURL(`http://127.0.0.1:${DESKTOP_PORT}`);
+}
+
+function resolveRuntimeRoot() {
+  const candidates = app.isPackaged
+    ? [process.resourcesPath, app.getAppPath()]
+    : [path.join(__dirname, "..")];
+
+  for (const candidate of candidates) {
+    if (
+      fs.existsSync(path.join(candidate, "server", "dist", "index.js")) &&
+      fs.existsSync(path.join(candidate, "client", "dist", "index.html"))
+    ) {
+      return candidate;
+    }
+  }
+
+  return candidates[0];
 }
 
 app.whenReady().then(() => {

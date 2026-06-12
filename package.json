@@ -53,11 +53,23 @@
     },
     "files": [
       "desktop/**/*",
-      "server/dist/**/*",
-      "client/dist/**/*",
       "node_modules/**/*",
       "package.json",
       ".env.example"
+    ],
+    "extraResources": [
+      {
+        "from": "server/dist",
+        "to": "server/dist"
+      },
+      {
+        "from": "client/dist",
+        "to": "client/dist"
+      },
+      {
+        "from": ".env.example",
+        "to": ".env.example"
+      }
     ],
     "extraMetadata": {
       "main": "desktop/main.cjs"
