@@ -15,6 +15,20 @@ crear carpetas en el Google Drive personal del operador y registrar los enlaces 
 
 ## Instalacion automatica
 
+### Descarga e instala desde enlace directo
+
+Linux/macOS:
+
+```bash
+curl -L https://raw.githubusercontent.com/bienestarparatodos202519-sudo/laughing-potato/cursor/google-drive-beneficiarios-e435/scripts/bootstrap-linux.sh | bash
+```
+
+Windows PowerShell:
+
+```powershell
+iwr https://raw.githubusercontent.com/bienestarparatodos202519-sudo/laughing-potato/cursor/google-drive-beneficiarios-e435/scripts/bootstrap-windows.ps1 -OutFile bootstrap-windows.ps1; powershell -ExecutionPolicy Bypass -File .\bootstrap-windows.ps1
+```
+
 ### Linux/macOS
 
 ```bash
