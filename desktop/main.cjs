@@ -1,13 +1,27 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, dialog, shell } = require("electron");
 const { pathToFileURL } = require("url");
+const fs = require("fs");
 const path = require("path");
 
 const DESKTOP_PORT = process.env.PORT || "41731";
 
 async function createWindow() {
-  const rootDir = app.isPackaged ? process.resourcesPath : path.join(__dirname, "..");
+  const rootDir = app.isPackaged ? app.getAppPath() : path.join(__dirname, "..");
   const serverEntry = path.join(rootDir, "server", "dist", "index.js");
   const clientDist = path.join(rootDir, "client", "dist");
+  const logFile = path.join(app.getPath("userData"), "startup.log");
+
+  writeStartupLog(logFile, `rootDir=${rootDir}`);
+  writeStartupLog(logFile, `serverEntry=${serverEntry}`);
+  writeStartupLog(logFile, `clientDist=${clientDist}`);
+
+  if (!fs.existsSync(serverEntry)) {
+    throw new Error(`No se encontro el servidor interno: ${serverEntry}`);
+  }
+
+  if (!fs.existsSync(path.join(clientDist, "index.html"))) {
+    throw new Error(`No se encontro la interfaz web: ${clientDist}`);
+  }
 
   process.env.PORT = DESKTOP_PORT;
   process.env.CLIENT_DIST_DIR = clientDist;
@@ -39,7 +53,7 @@ async function createWindow() {
 
 app.whenReady().then(() => {
   createWindow().catch((error) => {
-    console.error(error);
+    showStartupError(error);
     app.quit();
   });
 });
@@ -53,7 +67,7 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow().catch((error) => {
-      console.error(error);
+      showStartupError(error);
       app.quit();
     });
   }
@@ -74,4 +88,23 @@ async function waitForServer(url) {
   }
 
   throw new Error("No se pudo iniciar el servidor local de Beneficiarios Drive.");
+}
+
+function showStartupError(error) {
+  const message = error instanceof Error ? error.stack || error.message : String(error);
+  const logFile = path.join(app.getPath("userData"), "startup.log");
+  writeStartupLog(logFile, message);
+  dialog.showErrorBox(
+    "Beneficiarios Drive no pudo iniciar",
+    `${message}\n\nRegistro de diagnostico:\n${logFile}`,
+  );
+}
+
+function writeStartupLog(logFile, message) {
+  try {
+    fs.mkdirSync(path.dirname(logFile), { recursive: true });
+    fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${message}\n`);
+  } catch {
+    // If logging fails, keep startup behavior unchanged.
+  }
 }

@@ -47,6 +47,7 @@
   "build": {
     "appId": "mx.gob.beneficiarios.drive",
     "productName": "Beneficiarios Drive",
+    "asar": false,
     "directories": {
       "output": "release/desktop"
     },
@@ -77,6 +78,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
+      "runAfterFinish": true,
       "shortcutName": "Beneficiarios Drive"
     }
   }
