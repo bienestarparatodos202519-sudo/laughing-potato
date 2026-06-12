@@ -30,4 +30,20 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ["desktop/main.cjs"],
+    languageOptions: {
+      globals: {
+        __dirname: "readonly",
+        console: "readonly",
+        fetch: "readonly",
+        process: "readonly",
+        require: "readonly",
+        setTimeout: "readonly",
+      },
+    },
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 );
