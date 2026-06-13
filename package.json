@@ -1,0 +1,97 @@
+{
+  "name": "beneficiarios-google-drive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev --workspace server\" \"npm:dev --workspace client\"",
+    "build": "npm run build --workspace client && npm run build --workspace server",
+    "build:android": "bash scripts/build-android-apk.sh --sync-only",
+    "build:android:apk": "bash scripts/build-android-apk.sh",
+    "build:desktop:win": "npm run build && electron-builder --win nsis --x64 --publish never",
+    "build:installers": "npm run build:desktop:win && npm run build:android:apk",
+    "start": "npm run start --workspace server",
+    "lint": "eslint .",
+    "typecheck": "npm run typecheck --workspace client && npm run typecheck --workspace server",
+    "install:auto": "bash scripts/install.sh",
+    "preview": "npm run build && npm run start"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.4.0",
+    "@capacitor/cli": "^8.4.0",
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.3",
+    "electron": "^42.4.0",
+    "electron-builder": "^26.15.3",
+    "eslint": "^10.5.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0"
+  },
+  "dependencies": {
+    "@capacitor/core": "^8.4.0",
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "helmet": "^8.2.0",
+    "zod": "^4.4.3"
+  },
+  "build": {
+    "appId": "mx.gob.beneficiarios.drive",
+    "productName": "Beneficiarios Drive",
+    "asar": false,
+    "directories": {
+      "output": "release/desktop"
+    },
+    "files": [
+      "desktop/**/*",
+      "node_modules/**/*",
+      "package.json",
+      ".env.example"
+    ],
+    "extraResources": [
+      {
+        "from": "server/dist",
+        "to": "server/dist"
+      },
+      {
+        "from": "client/dist",
+        "to": "client/dist"
+      },
+      {
+        "from": ".env.example",
+        "to": ".env.example"
+      }
+    ],
+    "extraMetadata": {
+      "main": "desktop/main.cjs"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Beneficiarios-Drive-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true,
+      "shortcutName": "Beneficiarios Drive"
+    }
+  }
+}
